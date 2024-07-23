@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px; /* Sets a maximum width for the form */
+            box-sizing: border-box; /* Includes padding in width calculation */
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            text-align: center; /* Center-align the heading */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+        }
+
+        input {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%; /* Ensures input fields take the full width of the container */
+            box-sizing: border-box; /* Includes padding in width calculation */
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%; /* Ensures button takes the full width of the container */
+            box-sizing: border-box; /* Includes padding in width calculation */
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Sign In</h2>
+        <form id="signin-form">
+            <label for="signin-email">Email:</label>
+            <input type="email" id="signin-email" name="email" required>
+            <label for="signin-password">Password:</label>
+            <input type="password" id="signin-password" name="password" required>
+            <button type="submit">Sign In</button>
+            <br>
+            <button onclick="window.location.href='register.html'" style="background-color: #d32f2f">Register</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('signin-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const response = await fetch('http://localhost:8001/auth/login', {
+            method: 'POST',
+            body: formData,
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            // Handle successful login
+            const role = result.user.role; // Assuming user role is returned
+            localStorage.setItem('token', result.access_token); // Store token (e.g., in localStorage or a cookie)
+
+            if (role === 'Student') {
+                console.log(('You are on student page'))
+                window.location.href = './protected/student.html';
+            } else if (role === 'Profesor') {
+                console.log(('You are on profesor page'))
+                window.location.href = './protected/teacher.html';
+            }
+            else
+                console.log('none of the options happened')
+        } else {
+            // Handle errors
+            console.error('Login failed:', result.errors);
+        }
+    });
+    </script>
+</body>
+</html>
