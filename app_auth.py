@@ -76,15 +76,13 @@ def user_lookup_callback(_jwt_header, jwt_data):
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        ##  TO DO 
+        ## TO DO 
         # Task 3: Extragem datele din form
-        email = form.email.data
-        role = form.role.data
-        password = form.password.data
+
 
         ## TO DO
         # Task 4: Generam hashul parolei, utilizand libraria 'bcrypt', decodare 'utf-8'
-        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+
 
         # Cream instanta de User si il adaugam in baza de date
         user = User(email=email, role=role, password=hashed_password)
@@ -107,15 +105,14 @@ def login():
     if form.validate_on_submit():
         ## TO DO 
         # Task 5: Extragem datele din form
-        email = form.email.data
-        password = form.password.data
+
         
         # Cautam user-ul in baza de date dupa 'email'
         user = User.query.filter_by(email=email).first()
 
         ## TO DO
         # Task 6: Verificam ca User-ul exista SI/AND parola oferita in formular se potriveste cu hash-ul din BD
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
+        if 1:
             
             # Obtinem JWT token-ul pentru authentificare
             access_token = create_access_token(identity=email, expires_delta=timedelta(hours=24),
@@ -129,7 +126,7 @@ def login():
             #       "access_token": access_token,
             #       "message": "Successful Login"
             #  }
-            response = jsonify({"user": result, "access_token": access_token, "message": "Successful Login"})
+            
             return response, 200
 
         if not user or not user.password == password:
@@ -159,23 +156,18 @@ def logout():
 @app_auth.route('/protected/student', methods=['GET'])
 ##TO DO
 # Task 7: Adauga functia care protejeaza request-ul, impune existenta unui JWT Token
-@jwt_required()
+
 def student_dashboard():
     ## TO DO
     # Task 8: Vericare user-ul este Student
-    if current_user.role != 'Student':
+    if 1:
         return jsonify({'message': 'Access forbidden, you are not a Student'}), 403
     return jsonify({"message": "Welcome to the Student Dashboard"})
 
 
 ## TO DO 
 ## Task 9: Scrieti Ruta protejata pentru a accesa pagina de Profesor
-@app_auth.route('/protected/teacher', methods=['GET'])
-@jwt_required()
-def teacher_dashboard():
-    if current_user.role != 'Profesor':
-        return jsonify({'message': 'Access forbidden, you are not a Profesor'}), 403
-    return jsonify({"message": "Welcome to the Teacher Dashboard"})
+
 
 
 ### TO DO BONUS

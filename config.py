@@ -17,7 +17,7 @@ app_auth = Flask(__name__)
 
 ## TO DO
 # Task 2: Definiti politica de CORS
-CORS(app_auth, resources={r"/*": {"origins": "*"}})
+
 
 
 # setam conexiunea la baza de date sqlite
